@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 # -*- coding: binary -*-
 #Author: Lucifer
-#Date: 2017-8-26
+#Date: 2017-2-4
 
-require 'net/ftp'
+require 'net/tns'
+require 'net/tti'
 
-class FtpCrack
+class OracleCrack
     def initialize(ip, port, user, password, timeout)
         @ip = ip
         @port = port
@@ -36,14 +37,10 @@ class FtpCrack
 
     def hit
         begin
-            ftp = Net::FTP.new
-            ftp.read_timeout = @timeout
-            ftp.open_timeout = @timeout
-            ftp.connect(@ip, @port)
-            ftp.login(@user, @password)
-            result = ftp.lastresp
-            ftp.close
-            if result == "200"
+            tns = Net::TTI::Client.new
+            tns.connect( :host => @ip, :port => @port, :sid => "ORCL")
+            tns.authenticate(@user, @password)
+            if tns
                 return true
             else
                 return false

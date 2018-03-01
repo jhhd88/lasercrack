@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 # -*- coding: binary -*-
 #Author: Lucifer
-#Date: 2017-8-26
+#Date: 2017-2-1
 
-require 'net/ftp'
+require 'tiny_tds'
 
-class FtpCrack
+class MssqlCrack
     def initialize(ip, port, user, password, timeout)
         @ip = ip
         @port = port
@@ -36,13 +36,7 @@ class FtpCrack
 
     def hit
         begin
-            ftp = Net::FTP.new
-            ftp.read_timeout = @timeout
-            ftp.open_timeout = @timeout
-            ftp.connect(@ip, @port)
-            ftp.login(@user, @password)
-            result = ftp.lastresp
-            ftp.close
+            mssql = TinyTds::Client.new host: @ip, port:@port,  username: @user, password: @password, login_timeout: @timeout, timeout: @timeout
             if result == "200"
                 return true
             else

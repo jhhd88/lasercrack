@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 # -*- coding: binary -*-
 #Author: Lucifer
-#Date: 2017-8-26
+#Date: 2017-2-4
 
-require 'net/ftp'
+require 'net/vnc'
 
-class FtpCrack
+class VncCrack
     def initialize(ip, port, user, password, timeout)
         @ip = ip
         @port = port
@@ -36,13 +36,7 @@ class FtpCrack
 
     def hit
         begin
-            ftp = Net::FTP.new
-            ftp.read_timeout = @timeout
-            ftp.open_timeout = @timeout
-            ftp.connect(@ip, @port)
-            ftp.login(@user, @password)
-            result = ftp.lastresp
-            ftp.close
+            Net::VNC.open @ip+':0', :shared => true, :password => @password do |vnc|
             if result == "200"
                 return true
             else

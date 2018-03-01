@@ -16,6 +16,9 @@ require File.dirname(__FILE__)+'/smbattack'
 require File.dirname(__FILE__)+'/redisattack'
 require File.dirname(__FILE__)+'/mongoattack'
 require File.dirname(__FILE__)+'/telnetattack'
+require File.dirname(__FILE__)+'/mssqlattack'
+require File.dirname(__FILE__)+'/oracleattack'
+require File.dirname(__FILE__)+'/vncattack'
 
 class FrameWork
     # banner
@@ -80,10 +83,13 @@ class FrameWork
           "ftp" => FtpAttack.new,
           "ssh" => SshAttack.new,
           "mysql" => MysqlAttack.new,
+          "mssql" => MssqlAttack.new,
           "smb" => SmbAttack.new,
           "redis" => RedisAttack.new,
           "mongo" => MongoAttack.new,
           "telnet" => TelnetAttack.new,
+          "oracle" => OracleAttack.new,
+          "vnc" => VncAttack.new,
       }
     end
 
@@ -225,17 +231,21 @@ class FrameWork
             exploitips = value
             iplist.each { |item|
               pool.process {
-                #$semaphore.lock
-                #$semaphore.synchronize do
                   if exploitips.attack_once(item, @port.to_i, @username, @password, @timeout)
                     result = "[+] Crack it!"+" "*6+item+" "*6+@username+":"+@password
                     $OFFSET += 1
+                    $semaphore.lock
                     puts result.light_green
+                    $semaphore.unlock
                   else
                     if @verbose
+                      $semaphore.lock
                       puts "["+getnow+"]".light_white+" "*6+"Not found! ==> "+item.light_red
+                      $semaphore.unlock
                     else
+                      $semaphore.lock
                       progressbar = ProgressBar.create(:format => 'Processing: |%b>>%i| %p%% %t', :starting_at => $COUNTER, :total => iplist.length-$OFFSET-1)
+                      $semaphore.unlock
                       $COUNTER += 1
                       sleep 0.05
                       if progressbar.finished?
@@ -243,8 +253,6 @@ class FrameWork
                       end
                     end
                   end
-                #end
-                #$semaphore.unlock
               }
             }
             gets
@@ -280,16 +288,21 @@ class FrameWork
                 exploituserfiles = value
                 userfile.each { |item|
                     pool.process {
-                      #$semaphore.lock
                         if exploituserfiles.attack_once(@ip, @port.to_i, item, @password, @timeout)
                           result = "[+] Crack it!"+" "*6+@ip+" "*6+item+":"+@password
                           $OFFSET += 1
+                          $semaphore.lock
                           puts result.light_green
+                          $semaphore.unlock
                         else
                           if @verbose
+                            $semaphore.lock
                             puts "["+getnow+"]".light_white+" "*6+"Not found! ==> "+item.light_red+":"+@password.light_red
+                            $semaphore.unlock
                           else
+                            $semaphore.lock
                             progressbar = ProgressBar.create(:format => 'Processing: |%b>>%i| %p%% %t', :starting_at => $COUNTER, :total => userfile.length-$OFFSET-1)
+                            $semaphore.unlock
                             $COUNTER += 1
                             sleep 0.05
                             if progressbar.finished?
@@ -297,7 +310,6 @@ class FrameWork
                             end
                           end
                         end
-                      #$semaphore.unlock
                       }
                   }
                 gets
@@ -336,16 +348,21 @@ class FrameWork
                 exploitpassfiles = value
                 passfile.each { |item|
                     pool.process {
-                      #$semaphore.lock
                         if exploitpassfiles.attack_once(@ip, @port.to_i, @username, item, @timeout)
                           result = "[+] Crack it!"+" "*6+@ip+" "*6+@username+":"+item
                           $OFFSET += 1
+                          $semaphore.lock
                           puts result.light_green
+                          $semaphore.unlock
                         else
                           if @verbose
+                            $semaphore.lock
                             puts "["+getnow+"]".light_white+" "*6+"Not found! ==> "+@username.light_red+":"+item.light_red
+                            $semaphore.unlock
                           else
+                            $semaphore.lock
                             progressbar = ProgressBar.create(:format => 'Processing: |%b>>%i| %p%% %t', :starting_at => $COUNTER, :total => passfile.length-$OFFSET-1)
+                            $semaphore.unlock
                             $COUNTER += 1
                             sleep 0.05
                             if progressbar.finished?
@@ -353,7 +370,6 @@ class FrameWork
                             end
                           end
                         end
-                      #$semaphore.unlock
                       }
                   }
                 gets
@@ -491,8 +507,11 @@ class FrameWork
         puts "\ttelnet                Crack telnet passwords"
         puts "\tsmb                   Crack smb passwords"
         puts "\tmysql                 Crack mysql passwords"
+        puts "\tmssql                 Crack mssql passwords"
+        puts "\toracle                Crack oracle passwords"
         puts "\tredis                 Crack redis passwords"
         puts "\tmongo                 Crack mongo passwords"
+        puts "\tvnc                   Crack vnc passwords"
         return @strLine
 
       elsif @strLine.include? "set"
