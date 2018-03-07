@@ -36,11 +36,12 @@ class VncCrack
 
     def hit
         begin
-            Net::VNC.open @ip+':0', :shared => true, :password => @password do |vnc|
-            if result == "200"
-                return true
-            else
-                return false
+            Net::VNC.open @ip+':0', :shared => false, :port => @port, :password => @password, :timeout => @timeout do |vnc|
+                if vnc
+                    puts "yes"
+                else
+                    puts "no"
+                end
             end
         rescue
             return false
@@ -48,3 +49,6 @@ class VncCrack
     end
 
 end
+
+aa = VncCrack.new("10.211.55.1", 5900, 'test', '19930101', 1.0)
+puts aa.hit

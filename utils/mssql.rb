@@ -37,11 +37,12 @@ class MssqlCrack
     def hit
         begin
             mssql = TinyTds::Client.new host: @ip, port:@port,  username: @user, password: @password, login_timeout: @timeout, timeout: @timeout
-            if result == "200"
+            if mssql.active?
                 return true
             else
                 return false
             end
+            mssql.close
         rescue
             return false
         end
