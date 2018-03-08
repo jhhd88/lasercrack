@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: binary -*-
 #Author: Lucifer
-#Date: 2017-8-26
+#Date: 2017-12-08
 
 require 'colorize'
 require 'ipaddr'
