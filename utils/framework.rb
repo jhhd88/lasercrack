@@ -78,7 +78,7 @@ class FrameWork
       @pass_file = "nil"
       @verbose = false
       @threads = 10
-      @timeout = 3
+      @timeout = 5
       @exploithash = {
           "ftp" => FtpAttack.new,
           "ssh" => SshAttack.new,

@@ -6,19 +6,28 @@ Ruby 2.2.2及以后的版本
 
 # 支持爆破模块
 ftp
+
 ssh
+
 telnet
+
 smb
+
 mysql
+
 mssql
+
 oracle
+
 redis
+
 mongo
+
 vnc
 (后续有时间继续添加)
 
 # 安装
-bundle install
+bundle install（如果tiny_tds模块安装不上可能是缺少系统组件，先安装freetds）
 
 # 使用
 ![image](./images/laser.png)
@@ -32,3 +41,6 @@ bundle install
 [3] 单个IP,载入密码字典
 
 [ * ] 如果需要重新利用需要设置个别参数为nil
+
+# 特别说明
+此工具仅限于漏洞验证，如若使用者引起相关的法律责任请自负，开发者不承担连带责任。

@@ -50,5 +50,3 @@ class VncCrack
 
 end
 
-aa = VncCrack.new("10.211.55.1", 5900, 'test', '19930101', 1.0)
-puts aa.hit
