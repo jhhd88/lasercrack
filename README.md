@@ -28,6 +28,7 @@ vnc
 
 # 安装
 bundle install（如果tiny_tds模块安装不上可能是缺少系统组件，先安装freetds）
+kali系统使用apt-get install freetds-dev 命令安装
 
 # 使用
 ![image](./images/laser.png)
